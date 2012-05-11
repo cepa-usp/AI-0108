@@ -52,11 +52,13 @@ package
 			ai.addObserver(this);
 			var botbar:BottomBar = new BottomBar();
 			botbar.y = 451;
-			botbar.x = 112;
+			botbar.x = 122;
 			ai.container.addChild(botbar);
 			ai.container.messageLabel.visible = false;
 			ai.container.setAboutScreen(new AboutScreen());						
 			ai.container.setInfoScreen(new InstScreen());
+			ai.container.optionButtons.y = 344;
+			ai.container.optionButtons.x -= 10;
 			
 			//ai.container.optionButtons.y = ai.container.optionButtons.y - 140;
 			

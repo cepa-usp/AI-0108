@@ -45,7 +45,7 @@
 		// Membros privados.
 		//--------------------------------------------------
 		
-		private const VIEWPORT:Rectangle = new Rectangle(0, 0, 640, 480);
+		private const VIEWPORT:Rectangle = new Rectangle(0, 0, 700, 600);
 		
 		private var graph:SimpleGraph;
 		private var style1:DataStyle;
@@ -62,6 +62,7 @@
 		private var showMinimo:CheckBox;
 		private var opcoes:ComboBox;
 		private var integrais:Array;
+		private var integral:Integral;
 		private var pontosIniciais:Array;
 		private var limitesGrafico:Array;
 		private var somaMaximo:TextField;
@@ -113,11 +114,12 @@
 			showMaximo.addEventListener(MouseEvent.CLICK, showHideBarrasMaximo);
 			
 			somaMaximo = new TextField();
+			
 			addChild(somaMaximo);
 			somaMaximo.width += 60;
 			somaMaximo.selectable = false;
 			somaMaximo.defaultTextFormat = new TextFormat("arial", 12, 0x0000FF);
-			somaMaximo.text = "Soma superior = 100.00";
+			somaMaximo.text = "100.00";
 			
 			showMinimo = new CheckBox();
 			showMinimo.label = "";
@@ -130,7 +132,8 @@
 			somaMinimo.width += 40;
 			somaMinimo.selectable = false;
 			somaMinimo.defaultTextFormat = new TextFormat("arial", 12, 0xFF0000);
-			somaMinimo.text = "Soma inferior = 100.00";
+			somaMinimo.text = "100.00";
+			
 			
 			showTotal = new CheckBox();
 			showTotal.label = "";
@@ -142,7 +145,14 @@
 			addChild(somaTotal);
 			somaTotal.selectable = false;
 			somaTotal.defaultTextFormat = new TextFormat("arial", 12, 0xCC6600);
-			somaTotal.text = "Área = 100.00";
+			somaTotal.text = "100.00";
+			
+			integral = new Integral();
+			addChild(integral);
+			integral.addEventListener(MouseEvent.MOUSE_OVER, onIntegralMouseOver)
+			integral.addEventListener(MouseEvent.MOUSE_OUT, onIntegralMouseOut)
+			
+			
 			
 			var listaFuncoes:Array = [ {label:"x^2", data:0 },
 									   {label:"sen(x) + 2", data:1 },
@@ -154,26 +164,41 @@
 			addChild(opcoes);
 			opcoes.addEventListener(Event.CHANGE, addFunction);
 			
-			showMaximo.x = 310;// 350;
+			showMaximo.x = 270;// 350;
 			showMaximo.y = 450;
 			
 			somaMaximo.x = showMaximo.x + 20;
 			somaMaximo.y = showMaximo.y + 2;
 			
-			showMinimo.x = 5;
+			showMinimo.x = 20;
 			showMinimo.y = 450;
 			
 			somaMinimo.x = showMinimo.x + 20;
 			somaMinimo.y = showMinimo.y + 2;
 			
-			showTotal.x = 180;//200;
+			showTotal.x = 110;//200;
 			showTotal.y = 450;
 			
-			somaTotal.x = showTotal.x + 20;
-			somaTotal.y = showTotal.y + 2;
 			
-			opcoes.x = 530;
+			somaTotal.x = showTotal.x + 45;
+			somaTotal.y = showTotal.y + 55;
+			somaTotal.visible = false;
+			
+			integral.x = showTotal.x + 70;
+			integral.y = showTotal.y + 15;
+			
+			opcoes.x = 450;
 			opcoes.y = 450;
+		}
+		
+		private function onIntegralMouseOut(e:MouseEvent):void 
+		{
+			somaTotal.visible = false;
+		}
+		
+		private function onIntegralMouseOver(e:MouseEvent):void 
+		{
+			somaTotal.visible = true;
 		}
 		
 		private function showHideBarrasMinimo(e:MouseEvent):void 
@@ -252,6 +277,7 @@
 			graph = new SimpleGraph(xMin, xMax, largura, yMin, yMax, altura);
 			//graph.setTicksDistance(SimpleGraph.AXIS_X, 1);
 			//graph.setSubticksDistance(SimpleGraph.AXIS_X, 1);
+			graph.setTickAlignment(SimpleGraph.AXIS_X, "TICKS_CENTER")
 			//graph.setTicksDistance(SimpleGraph.AXIS_Y, 0.5);
 			//graph.setSubticksDistance(SimpleGraph.AXIS_Y, 1);
 			graph.grid = false;
@@ -314,12 +340,38 @@
 		
 		private function configuraPontos():void
 		{
+			var t:TextField 
 			if (pontoA == null)
 			{
 				pontoA = new PontoArraste();
+				
+				t = new TextField();				
+				t.text = "A";
+				t.height = t.textHeight+4;
+				t.x = -30;
+				t.y = 24;
+				pontoA.addChild(t);
 				pontoA.nome.text = "A";
+				pontoA.mouseChildren = false;
+				pontoA.nome.visible = false;
+				pontoA.addEventListener(MouseEvent.MOUSE_OVER, onPontoOver);
+				pontoA.addEventListener(MouseEvent.MOUSE_OUT, onPontoOut);
+				
 				pontoB = new PontoArraste();
+				
+				
+				t = new TextField();				
+				t.text = "B";
+				t.height = t.textHeight+4;
+				t.x = -30;
+				t.y = 24;
+				pontoB.addChild(t);
 				pontoB.nome.text = "B";
+				pontoB.mouseChildren = false;
+				pontoB.nome.visible = false;
+				pontoB.addEventListener(MouseEvent.MOUSE_OVER, onPontoOver);
+				pontoB.addEventListener(MouseEvent.MOUSE_OUT, onPontoOut);
+				
 				
 				addChild(pontoA);
 				addChild(pontoB);
@@ -336,6 +388,18 @@
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
 			dx.y = pontoA.y;
+		}
+		
+		private function onPontoOut(e:MouseEvent):void 
+		{
+			var p:PontoArraste = PontoArraste(e.target);
+			p.nome.visible = false;
+		}
+		
+		private function onPontoOver(e:MouseEvent):void 
+		{
+			var p:PontoArraste = PontoArraste(e.target);
+			p.nome.visible = true;			
 		}
 		
 		private function initArrastePonto(e:MouseEvent):void 
@@ -461,7 +525,7 @@
 				//somaTotalMaxima += base * graph.pixel2y(areasMaximas[i].y - areasMaximas[i].height - graph.y);
 				somaTotalMaxima += base * funcoes[funcaoAtual](xPontoA + (i + 1) * base);
 			}
-			somaMaximo.text = "Soma superior = " + somaTotalMaxima.toFixed(2).replace(".", ",");
+			somaMaximo.text = "" + somaTotalMaxima.toFixed(2).replace(".", ",");
 			
 			
 			var somaTotalMinima:Number = 0;
@@ -470,7 +534,7 @@
 				//somaTotalMinima += base * graph.pixel2y(areasMinimas[i].y - areasMinimas[i].height - graph.y);
 				somaTotalMinima += base * funcoes[funcaoAtual](xPontoA + (i) * base);
 			}
-			somaMinimo.text = "Soma inferior = " + somaTotalMinima.toFixed(2).replace(".", ",");
+			somaMinimo.text = "" + somaTotalMinima.toFixed(2).replace(".", ",");
 			
 			
 			var somaTotalTotal:Number = integrais[funcaoAtual](xPontoB) - integrais[funcaoAtual](xPontoA);
@@ -479,8 +543,8 @@
 		
 		private function atualizaTextFields():void
 		{
-			pontoA.nome.text = "A = " + xPontoA.toFixed(2).replace(".",",");
-			pontoB.nome.text = "B = " + xPontoB.toFixed(2).replace(".",",");
+			pontoA.nome.text = "= " + xPontoA.toFixed(2).replace(".",",");
+			pontoB.nome.text = "= " + xPontoB.toFixed(2).replace(".",",");
 		}
 		
 		private function get xPontoA():Number
