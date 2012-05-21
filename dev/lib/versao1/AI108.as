@@ -81,6 +81,7 @@
 			
 			if (stage) stageDependentInit();
 			else addEventListener(Event.ADDED_TO_STAGE, stageDependentInit);
+
 		}
 		
 		/**
@@ -108,11 +109,10 @@
 		private function addCheckComboBox():void
 		{
 			showMaximo = new CheckBox();
-			showMaximo.label = "";
-			showMaximo.selected = true;
+			showMaximo.label = "Soma superior";
+			showMaximo.selected = true;			
 			addChild(showMaximo);
 			showMaximo.addEventListener(MouseEvent.CLICK, showHideBarrasMaximo);
-			
 			somaMaximo = new TextField();
 			
 			addChild(somaMaximo);
@@ -120,9 +120,10 @@
 			somaMaximo.selectable = false;
 			somaMaximo.defaultTextFormat = new TextFormat("arial", 12, 0x0000FF);
 			somaMaximo.text = "100.00";
+			somaMaximo.height = 18;
 			
 			showMinimo = new CheckBox();
-			showMinimo.label = "";
+			showMinimo.label = "Soma inferior";
 			showMinimo.selected = true;
 			addChild(showMinimo);
 			showMinimo.addEventListener(MouseEvent.CLICK, showHideBarrasMinimo);
@@ -133,10 +134,12 @@
 			somaMinimo.selectable = false;
 			somaMinimo.defaultTextFormat = new TextFormat("arial", 12, 0xFF0000);
 			somaMinimo.text = "100.00";
+			somaMinimo.multiline = false;
+			somaMinimo.height = 18;
 			
 			
 			showTotal = new CheckBox();
-			showTotal.label = "";
+			showTotal.label = "área";
 			showTotal.selected = false;
 			addChild(showTotal);
 			showTotal.addEventListener(MouseEvent.CLICK, showHideTotal);
@@ -164,30 +167,32 @@
 			addChild(opcoes);
 			opcoes.addEventListener(Event.CHANGE, addFunction);
 			
-			showMaximo.x = 270;// 350;
-			showMaximo.y = 450;
+			showMaximo.x = 305;// 350;
+			showMaximo.width += 40;
+			showMaximo.y = 510;
 			
-			somaMaximo.x = showMaximo.x + 20;
-			somaMaximo.y = showMaximo.y + 2;
+			somaMaximo.x = 305;
+			somaMaximo.y = 450;
 			
-			showMinimo.x = 20;
-			showMinimo.y = 450;
+			showMinimo.x = 30;
+			showMinimo.width += 40;
+			showMinimo.y = 510;
 			
-			somaMinimo.x = showMinimo.x + 20;
-			somaMinimo.y = showMinimo.y + 2;
+			somaMinimo.x = 30;
+			somaMinimo.y = 452;
 			
-			showTotal.x = 110;//200;
-			showTotal.y = 450;
+			showTotal.x = 130;//200;
+			showTotal.y = 510;
 			
 			
 			somaTotal.x = showTotal.x + 45;
-			somaTotal.y = showTotal.y + 55;
+			somaTotal.y = showTotal.y;
 			somaTotal.visible = false;
 			
 			integral.x = showTotal.x + 70;
-			integral.y = showTotal.y + 15;
+			integral.y = 465;
 			
-			opcoes.x = 450;
+			opcoes.x = 470;
 			opcoes.y = 450;
 		}
 		
@@ -261,7 +266,7 @@
 		
 		private function configGraph():void
 		{
-			var xMin:Number = 0;
+			var xMin:Number = -10.5;
 			var xMax:Number = 10;
 			var largura:Number = 580;
 			var yMin:Number = 0;
@@ -331,7 +336,7 @@
 		private function redefineLimitesGráfico():void
 		{
 			graph.xmax = limitesGrafico[funcaoAtual].x;
-			graph.xmin = 0;
+			graph.xmin = -0.5;
 			
 			graph.ymax = limitesGrafico[funcaoAtual].y;
 			graph.ymin =  - limitesGrafico[funcaoAtual].y / 10;
@@ -340,15 +345,17 @@
 		
 		private function configuraPontos():void
 		{
-			var t:TextField 
+			var t:TextField;
+			
 			if (pontoA == null)
 			{
 				pontoA = new PontoArraste();
 				
 				t = new TextField();				
+				t.defaultTextFormat = new TextFormat("arial", 12);
 				t.text = "A";
 				t.height = t.textHeight+4;
-				t.x = -30;
+				t.x = -3;
 				t.y = 24;
 				pontoA.addChild(t);
 				pontoA.nome.text = "A";
@@ -360,10 +367,11 @@
 				pontoB = new PontoArraste();
 				
 				
-				t = new TextField();				
+				t = new TextField();		
+				t.defaultTextFormat = new TextFormat("arial", 12);
 				t.text = "B";
 				t.height = t.textHeight+4;
-				t.x = -30;
+				t.x = -3;
 				t.y = 24;
 				pontoB.addChild(t);
 				pontoB.nome.text = "B";
@@ -538,7 +546,7 @@
 			
 			
 			var somaTotalTotal:Number = integrais[funcaoAtual](xPontoB) - integrais[funcaoAtual](xPontoA);
-			somaTotal.text = "Área = " + somaTotalTotal.toFixed(2).replace(".", ",");
+			somaTotal.text = " = " + somaTotalTotal.toFixed(2).replace(".", ",");
 		}
 		
 		private function atualizaTextFields():void

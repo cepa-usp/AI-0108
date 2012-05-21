@@ -14,8 +14,7 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="..\..\Framework\dev\AI\src" />
-    <class path="..\..\Framework\dev\AI\lib" />
+    <class path="lib" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -52,6 +51,8 @@
     <element path="..\..\Framework\dev\AI\lib\as3corelib.swc" />
     <element path="..\..\Framework\dev\AI\lib\ui.swc" />
     <element path="lib\arte.swc" />
+    <element path="lib\as3corelib.swc" />
+    <element path="lib\ui.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
