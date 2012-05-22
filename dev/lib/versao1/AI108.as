@@ -3,6 +3,7 @@
 	import cepa.graph.DataStyle;
 	import cepa.graph.GraphFunction;
 	import cepa.graph.rectangular.SimpleGraph;
+	import com.eclecticdesignstudio.motion.Actuate;
 	import fl.controls.CheckBox;
 	import fl.controls.ComboBox;
 	import fl.data.DataProvider;
@@ -13,10 +14,12 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.utils.Timer;
 
 	
 	public class AI108 extends Sprite
@@ -67,9 +70,12 @@
 		private var limitesGrafico:Array;
 		private var somaMaximo:TextField;
 		private var somaMinimo:TextField;
+		private var mouseCoord:TextField = new TextField();
 		private var showTotal:CheckBox;
 		private var somaTotal:TextField;
+		private var showCoords:Boolean = false;
 		private var areaTotal:Sprite;
+		private var timeToShow:Timer = new Timer(400, 1);
 		
 		/**
 		 * @private
@@ -104,7 +110,42 @@
 			
 			
 			addListenersGerais();
+			
+
+			addChild(mouseCoord);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, updateMouseCoord);
+			mouseCoord.alpha = 0;
+			updateMouseCoord(null);			
+			timeToShow.addEventListener(TimerEvent.TIMER_COMPLETE, showMouseCoords);
+
 		}
+		
+		
+		private function showMouseCoords(e:TimerEvent):void 
+		{
+			if (stage.mouseY > graph.height) return;
+			Actuate.tween(mouseCoord, 1, { alpha:1 } );
+		}
+		
+		private function updateMouseCoord(e:MouseEvent):void 
+		{
+			if (mouseCoord.alpha != 0) Actuate.tween(mouseCoord, 0.8, { alpha:0 }, false );
+			
+			mouseCoord.text = "(" + graph.pixel2x(stage.mouseX - graph.x).toFixed(2) + " ," + graph.pixel2y(stage.mouseY - graph.y).toFixed(2) + ")";
+			
+			if (stage.mouseX + mouseCoord.textWidth > stage.stageWidth - 5) mouseCoord.x = stage.mouseX - mouseCoord.textWidth - 5;
+			else mouseCoord.x = stage.mouseX;
+			if (stage.mouseY - 20 < 5) mouseCoord.y = stage.mouseY + 20;
+			else mouseCoord.y = stage.mouseY - 20;
+			
+			if (timeToShow.running) {
+				timeToShow.stop();
+				timeToShow.reset();
+			}
+			
+			timeToShow.start();
+		}
+		
 		
 		private function addCheckComboBox():void
 		{
@@ -268,11 +309,10 @@
 		{
 			var xMin:Number = -10.5;
 			var xMax:Number = 10;
-			var largura:Number = 580;
+			var largura:Number = 570;
 			var yMin:Number = 0;
 			var yMax:Number = 10;
-			var altura:Number = 400;
-			
+			var altura:Number = 380;
 			if (graph != null) 
 			{
 				removeChild(graph);
@@ -280,6 +320,9 @@
 			}
 			
 			graph = new SimpleGraph(xMin, xMax, largura, yMin, yMax, altura);
+			graph.setAxisName("AXIS_X", "x");
+			graph.setAxisName("AXIS_Y", "y");
+
 			//graph.setTicksDistance(SimpleGraph.AXIS_X, 1);
 			//graph.setSubticksDistance(SimpleGraph.AXIS_X, 1);
 			graph.setTickAlignment(SimpleGraph.AXIS_X, "TICKS_CENTER")
@@ -287,8 +330,8 @@
 			//graph.setSubticksDistance(SimpleGraph.AXIS_Y, 1);
 			graph.grid = false;
 			
-			graph.x = 30;
-			graph.y = 15;
+			graph.x = 20;
+			graph.y = 40;
 			
 			graph.resolution = 1;
 			
@@ -302,7 +345,21 @@
 			graphFunction = new GraphFunction(0, 20, function ():Number {return 0 } );
 			
 			graph.addFunction(graphFunction, style1);
+			
+			dx.addEventListener(MouseEvent.MOUSE_OVER, onDxOver);
+			dx.addEventListener(MouseEvent.MOUSE_OUT, onDxOut);
+			//dx.txt.visible = false;
 		}
+		
+		private function onDxOver(e:MouseEvent):void 
+		{
+			dx.txt.visible = true;		
+			//trace("ma oe")
+		}
+		private function onDxOut(e:MouseEvent):void 
+		{
+			dx.txt.visible = false;			
+		}		
 		
 		private function addFunction(e:Event = null):void
 		{
@@ -396,6 +453,7 @@
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
 			dx.y = pontoA.y;
+			
 		}
 		
 		private function onPontoOut(e:MouseEvent):void 
@@ -429,6 +487,7 @@
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
 			dx.y = pontoA.y;
+			
 			
 			configuraAreas();
 			atualizaSomaAreas();
@@ -507,7 +566,7 @@
 			areaTotal.graphics.clear();
 			
 			var deltaX:Number = (xPontoB - xPontoA) / 20;
-			
+			dx.txt.text = "= " + deltaX.toFixed(5);
 			areaTotal.graphics.lineStyle(1, 0xD88912, 1);
 			areaTotal.graphics.beginFill(0xFFFF80);
 			areaTotal.graphics.moveTo(pontoB.x, pontoB.y);

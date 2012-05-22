@@ -36,10 +36,10 @@ package
 				Balão #3 (apontando para o check-box da área):
 				Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.
 			 */
-				
-			 tutor.adicionarBalao("Escolha a função que deve ser exibida.", new Point(590, 460), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
-			 tutor.adicionarBalao("Arraste os pontos A e B para alterar os limites de integração.", new Point(263, 380), CaixaTexto.BOTTOM, CaixaTexto.CENTER);
-			 tutor.adicionarBalao("Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.", new Point(320, 468), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
+			
+			 tutor.adicionarBalao("Escolha a função que deve ser exibida.", new Point(540, 460), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
+			 tutor.adicionarBalao("Arraste os pontos A e B para alterar os limites de integração.", new Point(277, 380), CaixaTexto.BOTTOM, CaixaTexto.CENTER);
+			 tutor.adicionarBalao("Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.", new Point(320, 525), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
 			 
 			 
 		}
@@ -63,6 +63,7 @@ package
 			//ai.container.optionButtons.y = ai.container.optionButtons.y - 140;
 			
 			loadLO();
+			tutor.iniciar(stage);
 		}
 
 		private function loadLO():void {
