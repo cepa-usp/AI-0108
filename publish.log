@@ -2,8 +2,8 @@ Copying from /c/Documents and Settings/Arthur/Meus documentos/CEPA/GitHub/AI-010
 building file list ... done
 ./
 swf/
-v1/
+swf/AI-0108.swf
 v1/0108.swf
 
-sent 60628 bytes  received 556 bytes  40789.33 bytes/sec
-total size is 351623  speedup is 5.75
+sent 424257 bytes  received 2186 bytes  284295.33 bytes/sec
+total size is 528067  speedup is 1.24
