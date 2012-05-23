@@ -70,6 +70,7 @@
 		private var showTotal:CheckBox;
 		private var somaTotal:TextField;
 		private var areaTotal:Sprite;
+		private var nAreas:int;
 		
 		/**
 		 * @private
@@ -92,7 +93,7 @@
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, stageDependentInit);
 			
-		
+			nAreas = 5; //Número de áreas inicial.
 			
 			addCheckComboBox();
 			
@@ -100,8 +101,6 @@
 			configGraph();
 			addFunction();
 			//configuraPontos();
-			
-			
 			
 			addListenersGerais();
 		}
@@ -327,7 +326,7 @@
 			graph.draw();
 			
 			configuraPontos();
-			configuraAreas();
+			configuraAreas(nAreas);
 			
 			atualizaSomaAreas();
 			atualizaTextFields();
@@ -430,7 +429,7 @@
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
 			dx.y = pontoA.y;
 			
-			configuraAreas();
+			configuraAreas(nAreas);
 			atualizaSomaAreas();
 			atualizaTextFields();
 		}
@@ -447,17 +446,20 @@
 			pontoArraste = null;
 		}
 		
-		private function configuraAreas():void
+		private function configuraAreas(nAreas:int):void
 		{
+			this.nAreas = nAreas;
 			if (areasMaximas == null)
 			{
-				areasMaximas = [new AreaMaxima(), new AreaMaxima(), new AreaMaxima(), new AreaMaxima()];
-				areasMinimas = [new AreaMinima(), new AreaMinima(), new AreaMinima(), new AreaMinima()];
+				areasMaximas = [];
+				areasMinimas = [];
 				areaTotal = new Sprite();
 				areaTotal.visible = false;
 				
-				for (var i:int = 0; i < areasMaximas.length; i++) 
+				for (var i:int = 0; i < nAreas; i++) 
 				{
+					areasMaximas.push(new AreaMaxima());
+					areasMinimas.push(new AreaMinima());
 					addChild(areasMaximas[i]);
 					addChild(areasMinimas[i]);
 					setChildIndex(areasMinimas[i], 0);
@@ -465,9 +467,29 @@
 				}
 				addChild(areaTotal);
 				setChildIndex(areaTotal, 0);
+			}else if (nAreas != areasMaximas.length) {
+				if (nAreas > areasMaximas.length) {
+					for (var j:int = areasMaximas.length; j < nAreas; j++) 
+					{
+						areasMaximas.push(new AreaMaxima());
+						areasMinimas.push(new AreaMinima());
+						addChild(areasMaximas[j]);
+						addChild(areasMinimas[j]);
+						setChildIndex(areasMinimas[j], getChildIndex(areasMinimas[j - 1]));
+						setChildIndex(areasMaximas[j], getChildIndex(areasMaximas[j - 1]));
+					}
+				}else {
+					for (j = areasMaximas.length - 1; j > nAreas - 1; j--) 
+					{
+						removeChild(areasMaximas[j]);
+						removeChild(areasMinimas[j]);
+						areasMaximas.splice(j, 1);
+						areasMinimas.splice(j, 1);
+					}
+				}
 			}
 			
-			var comprimentoBarras:Number = (pontoB.x - pontoA.x) / areasMaximas.length;
+			var comprimentoBarras:Number = (pontoB.x - pontoA.x) / nAreas;
 			
 			for (i = 0; i < areasMaximas.length; i++) 
 			{
@@ -506,6 +528,7 @@
 			
 			areaTotal.graphics.clear();
 			
+			
 			var deltaX:Number = (xPontoB - xPontoA) / 20;
 			
 			areaTotal.graphics.lineStyle(1, 0xD88912, 1);
@@ -525,7 +548,7 @@
 		
 		private function atualizaSomaAreas():void
 		{
-			var base:Number = (xPontoB - xPontoA) / 4;
+			var base:Number = (xPontoB - xPontoA) / nAreas;
 			
 			var somaTotalMaxima:Number = 0;
 			
