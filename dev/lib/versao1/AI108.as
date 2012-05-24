@@ -64,6 +64,7 @@
 		private var showMaximo:CheckBox;
 		private var showMinimo:CheckBox;
 		private var opcoes:ComboBox;
+		private var qtAreas:ComboBox;
 		private var integrais:Array;
 		private var integral:Integral;
 		private var pontosIniciais:Array;
@@ -76,6 +77,7 @@
 		private var showCoords:Boolean = false;
 		private var areaTotal:Sprite;
 		private var timeToShow:Timer = new Timer(400, 1);
+		private var nAreas:int;
 		
 		/**
 		 * @private
@@ -99,6 +101,7 @@
 			removeEventListener(Event.ADDED_TO_STAGE, stageDependentInit);
 			
 		
+			nAreas = 5; //Número de áreas inicial.
 			
 			addCheckComboBox();
 			
@@ -115,8 +118,11 @@
 			addChild(mouseCoord);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, updateMouseCoord);
 			mouseCoord.alpha = 0;
+			mouseCoord.selectable = false;
+			
 			updateMouseCoord(null);			
 			timeToShow.addEventListener(TimerEvent.TIMER_COMPLETE, showMouseCoords);
+			configuraAreas(3);
 
 		}
 		
@@ -135,8 +141,8 @@
 			
 			if (stage.mouseX + mouseCoord.textWidth > stage.stageWidth - 5) mouseCoord.x = stage.mouseX - mouseCoord.textWidth - 5;
 			else mouseCoord.x = stage.mouseX;
-			if (stage.mouseY - 20 < 5) mouseCoord.y = stage.mouseY + 20;
-			else mouseCoord.y = stage.mouseY - 20;
+			if (stage.mouseY - 20 < 5) mouseCoord.y = stage.mouseY + 22;
+			else mouseCoord.y = stage.mouseY - 22;
 			
 			if (timeToShow.running) {
 				timeToShow.stop();
@@ -200,42 +206,57 @@
 			
 			var listaFuncoes:Array = [ {label:"x^2", data:0 },
 									   {label:"sen(x) + 2", data:1 },
-									   {label:"e^x", data:2 }];
+									   {label:"e^x", data:2 } ];
+									   
+								   
 			
 			opcoes = new ComboBox();
 			opcoes.dataProvider = new DataProvider(listaFuncoes);
 			
+			qtAreas = new ComboBox();
+			qtAreas.dataProvider = new DataProvider([3, 5, 10, 20, 50, 100, 200, 500, 1000]);
+			
+			
 			addChild(opcoes);
+			addChild(qtAreas);
 			opcoes.addEventListener(Event.CHANGE, addFunction);
+			qtAreas.addEventListener(Event.CHANGE, onAreaChange);			
+			var linhaCheckboxesY:int = 500;
 			
 			showMaximo.x = 305;// 350;
 			showMaximo.width += 40;
-			showMaximo.y = 510;
+			showMaximo.y = linhaCheckboxesY;
 			
 			somaMaximo.x = 305;
 			somaMaximo.y = 450;
 			
 			showMinimo.x = 30;
 			showMinimo.width += 40;
-			showMinimo.y = 510;
+			showMinimo.y = linhaCheckboxesY;
 			
 			somaMinimo.x = 30;
 			somaMinimo.y = 452;
 			
-			showTotal.x = 130;//200;
-			showTotal.y = 510;
+			
+			showTotal.x = 160;//200;
+			showTotal.y = linhaCheckboxesY;
 			
 			
-			somaTotal.x = showTotal.x + 45;
+			somaTotal.x = showTotal.x + 55;
 			somaTotal.y = showTotal.y;
 			somaTotal.visible = false;
 			
-			integral.x = showTotal.x + 70;
+			integral.x = 200;
 			integral.y = 465;
 			
 			opcoes.x = 470;
 			opcoes.y = 450;
+			
+			qtAreas.x = 470;
+			qtAreas.y = 480;
 		}
+		
+
 		
 		private function onIntegralMouseOut(e:MouseEvent):void 
 		{
@@ -361,6 +382,12 @@
 			dx.txt.visible = false;			
 		}		
 		
+		private function onAreaChange(e:Event):void 
+		{
+			var q:int = qtAreas.selectedItem.data;
+			configuraAreas(q);
+		}		
+		
 		private function addFunction(e:Event = null):void
 		{
 			if (e != null) {
@@ -384,7 +411,7 @@
 			graph.draw();
 			
 			configuraPontos();
-			configuraAreas();
+			configuraAreas(nAreas);
 			
 			atualizaSomaAreas();
 			atualizaTextFields();
@@ -410,12 +437,12 @@
 				
 				t = new TextField();				
 				t.defaultTextFormat = new TextFormat("arial", 12);
-				t.text = "A";
+				t.text = "a";
 				t.height = t.textHeight+4;
 				t.x = -3;
 				t.y = 24;
 				pontoA.addChild(t);
-				pontoA.nome.text = "A";
+				pontoA.nome.text = "a";
 				pontoA.mouseChildren = false;
 				pontoA.nome.visible = false;
 				pontoA.addEventListener(MouseEvent.MOUSE_OVER, onPontoOver);
@@ -426,12 +453,12 @@
 				
 				t = new TextField();		
 				t.defaultTextFormat = new TextFormat("arial", 12);
-				t.text = "B";
+				t.text = "b";
 				t.height = t.textHeight+4;
 				t.x = -3;
 				t.y = 24;
 				pontoB.addChild(t);
-				pontoB.nome.text = "B";
+				pontoB.nome.text = "b";
 				pontoB.mouseChildren = false;
 				pontoB.nome.visible = false;
 				pontoB.addEventListener(MouseEvent.MOUSE_OVER, onPontoOver);
@@ -452,7 +479,7 @@
 			pontoB.y = graph.y2pixel(0) + graph.y;
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
-			dx.y = pontoA.y;
+			dx.y = 200  //pontoA.y;
 			
 		}
 		
@@ -486,10 +513,10 @@
 			pontoArraste.x = Math.abs(posSnap - posCalc) < 5 ? posSnap: posCalc;
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
-			dx.y = pontoA.y;
+			dx.y = 200 //pontoA.y;
 			
 			
-			configuraAreas();
+			configuraAreas(nAreas);
 			atualizaSomaAreas();
 			atualizaTextFields();
 		}
@@ -504,35 +531,66 @@
 			stage.removeEventListener(MouseEvent.MOUSE_UP, stopArrastePonto);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, movingPonto);
 			pontoArraste = null;
+			configuraAreas(nAreas);
 		}
 		
-		private function configuraAreas():void
+		private function configuraAreas(nAreas:int):void
 		{
+			this.nAreas = nAreas;
 			if (areasMaximas == null)
 			{
-				areasMaximas = [new AreaMaxima(), new AreaMaxima(), new AreaMaxima(), new AreaMaxima()];
-				areasMinimas = [new AreaMinima(), new AreaMinima(), new AreaMinima(), new AreaMinima()];
+
+
+				areasMaximas = [];
+				areasMinimas = [];
 				areaTotal = new Sprite();
 				areaTotal.visible = false;
 				
-				for (var i:int = 0; i < areasMaximas.length; i++) 
+				for (var i:int = 0; i < nAreas; i++) 
 				{
+					areasMaximas.push(new AreaMaxima());
+					areasMinimas.push(new AreaMinima());
 					addChild(areasMaximas[i]);
 					addChild(areasMinimas[i]);
+					areasMaximas[i].visible = showMaximo.selected;
+					areasMinimas[i].visible = showMinimo.selected;
 					setChildIndex(areasMinimas[i], 0);
 					setChildIndex(areasMaximas[i], 0);
 				}
 				addChild(areaTotal);
 				setChildIndex(areaTotal, 0);
+			}else if (nAreas != areasMaximas.length) {
+				if (nAreas > areasMaximas.length) {
+					for (var j:int = areasMaximas.length; j < nAreas; j++) 
+					{
+						areasMaximas.push(new AreaMaxima());
+						areasMinimas.push(new AreaMinima());
+						addChild(areasMaximas[j]);
+						addChild(areasMinimas[j]);
+						areasMaximas[j].visible = showMaximo.selected;
+						areasMinimas[j].visible = showMinimo.selected;
+						setChildIndex(areasMinimas[j], getChildIndex(areasMinimas[j - 1]));
+						setChildIndex(areasMaximas[j], getChildIndex(areasMaximas[j - 1]));
+					}
+				}else {
+					for (j = areasMaximas.length - 1; j > nAreas - 1; j--) 
+					{
+						removeChild(areasMaximas[j]);
+						removeChild(areasMinimas[j]);
+						areasMaximas.splice(j, 1);
+						areasMinimas.splice(j, 1);
+					}
+				}
 			}
 			
-			var comprimentoBarras:Number = (pontoB.x - pontoA.x) / areasMaximas.length;
-			
+			var comprimentoBarras:Number = (pontoB.x - pontoA.x) / nAreas;
+			trace(comprimentoBarras);
 			for (i = 0; i < areasMaximas.length; i++) 
 			{
 				//Atribui a largura das barras
 				areasMaximas[i].width = comprimentoBarras;
 				areasMinimas[i].width = comprimentoBarras;
+				
 				
 				//Atribui o posicionamento x e y das barras
 				if (i == 0) {
@@ -584,7 +642,7 @@
 		
 		private function atualizaSomaAreas():void
 		{
-			var base:Number = (xPontoB - xPontoA) / 4;
+			var base:Number = (xPontoB - xPontoA) / nAreas;
 			
 			var somaTotalMaxima:Number = 0;
 			

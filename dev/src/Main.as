@@ -57,9 +57,10 @@ package
 			ai.container.messageLabel.visible = false;
 			ai.container.setAboutScreen(new AboutScreen());						
 			ai.container.setInfoScreen(new InstScreen());
-			ai.container.optionButtons.y = 344;
-			ai.container.optionButtons.x -= 10;
 			
+			ai.container.optionButtons.y = 344;
+			ai.container.optionButtons.x -= 5;
+			ai.container.optionButtons.y += 35;
 			//ai.container.optionButtons.y = ai.container.optionButtons.y - 140;
 			
 			loadLO();
