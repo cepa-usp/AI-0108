@@ -55,8 +55,8 @@
 		private var tweenMenu:Tween;
 		private var funcoes:Array;
 		private var graphFunction:GraphFunction;
-		private var areasMaximas:Array;
-		private var areasMinimas:Array;
+		private var areasMaximas:Sprite;
+		private var areasMinimas:Sprite;
 		private var pontoA:MovieClip;
 		private var pontoB:MovieClip;
 		private var funcaoAtual:int;
@@ -102,6 +102,13 @@
 			
 		
 			nAreas = 5; //Número de áreas inicial.
+			
+			areasMaximas = new Sprite();
+			areasMinimas = new Sprite();
+			areaTotal = new Sprite();
+			addChild(areaTotal);
+			addChild(areasMaximas);
+			addChild(areasMinimas);
 			
 			addCheckComboBox();
 			
@@ -272,16 +279,18 @@
 		{
 			if (showMinimo.selected) {
 				//showMinimo.selected = false;
-				for (var i:int = 0; i < areasMinimas.length; i++) 
-				{
-					areasMinimas[i].visible = true;
-				}
+				//for (var i:int = 0; i < areasMinimas.length; i++) 
+				//{
+					//areasMinimas[i].visible = true;
+				//}
+				areasMinimas.visible = true;
 			}else {
 				//showMinimo.selected = true;
-				for (i = 0; i < areasMinimas.length; i++) 
-				{
-					areasMinimas[i].visible = false;
-				}
+				//for (i = 0; i < areasMinimas.length; i++) 
+				//{
+					//areasMinimas[i].visible = false;
+				//}
+				areasMinimas.visible = false;
 			}
 		}
 		
@@ -289,16 +298,18 @@
 		{
 			if (showMaximo.selected) {
 				//showMaximo.selected = false;
-				for (var i:int = 0; i < areasMaximas.length; i++) 
-				{
-					areasMaximas[i].visible = true;
-				}
+				//for (var i:int = 0; i < areasMaximas.length; i++) 
+				//{
+					//areasMaximas[i].visible = true;
+				//}
+				areasMaximas.visible = true;
 			}else {
 				//showMaximo.selected = true;
-				for (i = 0; i < areasMaximas.length; i++) 
-				{
-					areasMaximas[i].visible = false;
-				}
+				//for (i = 0; i < areasMaximas.length; i++) 
+				//{
+					//areasMaximas[i].visible = false;
+				//}
+				areasMaximas.visible = false;
 			}
 		}
 		
@@ -413,8 +424,8 @@
 			configuraPontos();
 			configuraAreas(nAreas);
 			
-			atualizaSomaAreas();
-			atualizaTextFields();
+			//atualizaSomaAreas();
+			//atualizaTextFields();
 		}
 		
 		private function redefineLimitesGráfico():void
@@ -517,8 +528,8 @@
 			
 			
 			configuraAreas(nAreas);
-			atualizaSomaAreas();
-			atualizaTextFields();
+			//atualizaSomaAreas();
+			//atualizaTextFields();
 		}
 		
 		private function distanciaPontos():Number
@@ -537,6 +548,7 @@
 		private function configuraAreas(nAreas:int):void
 		{
 			this.nAreas = nAreas;
+			/*
 			if (areasMaximas == null)
 			{
 
@@ -620,6 +632,40 @@
 				areasMaximas[i].height = alturaMaxima;
 				areasMinimas[i].height = alturaMinima;
 			}
+			*/
+			
+			var largura:Number = (pontoB.x - pontoA.x) / nAreas;
+			
+			areasMaximas.graphics.clear();
+			areasMaximas.graphics.lineStyle(1, 0x0000FF);
+			areasMaximas.graphics.beginFill(0x0000FF, 0.2);
+			
+			areasMinimas.graphics.clear();
+			areasMinimas.graphics.lineStyle(1, 0xEC0000);
+			areasMinimas.graphics.beginFill(0xEC0000, 0.2);
+			
+			for (var i:int = 0; i < nAreas; i++) 
+			{
+				var yMin:Number = graph.y2pixel(funcoes[funcaoAtual](graph.pixel2x(pontoA.x + i * largura - graph.x))) + graph.y;
+				var yMax:Number = graph.y2pixel(funcoes[funcaoAtual](graph.pixel2x(pontoA.x + i * largura + largura - graph.x))) + graph.y;
+				
+				if (yMin < yMax) {
+					var aux:Number = yMin;
+					yMin = yMax;
+					yMax = aux;
+				}
+				areasMaximas.graphics.moveTo(pontoA.x + i * largura, pontoA.y);
+				areasMaximas.graphics.lineTo(pontoA.x + i * largura, yMax);
+				areasMaximas.graphics.lineTo(pontoA.x + (i + 1) * largura, yMax);
+				areasMaximas.graphics.lineTo(pontoA.x + (i + 1) * largura, pontoA.y);
+				areasMaximas.graphics.lineTo(pontoA.x + i * largura, pontoA.y);
+				
+				areasMinimas.graphics.moveTo(pontoA.x + i * largura, pontoA.y);
+				areasMinimas.graphics.lineTo(pontoA.x + i * largura, yMin);
+				areasMinimas.graphics.lineTo(pontoA.x + (i + 1) * largura, yMin);
+				areasMinimas.graphics.lineTo(pontoA.x + (i + 1) * largura, pontoA.y);
+				areasMinimas.graphics.lineTo(pontoA.x + i * largura, pontoA.y);
+			}
 			
 			areaTotal.graphics.clear();
 			
@@ -638,27 +684,34 @@
 			}
 			
 			areaTotal.graphics.lineTo(pontoB.x, pontoB.y);
+			
+			atualizaSomaAreas();
+			atualizaTextFields();
 		}
 		
 		private function atualizaSomaAreas():void
 		{
-			var base:Number = (xPontoB - xPontoA) / nAreas;
+			var largura:Number = (xPontoB - xPontoA) / nAreas;
 			
 			var somaTotalMaxima:Number = 0;
-			
-			for (var i:int = 0; i < areasMaximas.length; i++) {
-				//somaTotalMaxima += base * graph.pixel2y(areasMaximas[i].y - areasMaximas[i].height - graph.y);
-				somaTotalMaxima += base * funcoes[funcaoAtual](xPontoA + (i + 1) * base);
-			}
-			somaMaximo.text = "" + somaTotalMaxima.toFixed(2).replace(".", ",");
-			
-			
 			var somaTotalMinima:Number = 0;
 			
-			for (i = 0; i < areasMinimas.length; i++) {
-				//somaTotalMinima += base * graph.pixel2y(areasMinimas[i].y - areasMinimas[i].height - graph.y);
-				somaTotalMinima += base * funcoes[funcaoAtual](xPontoA + (i) * base);
+			//for (var i:int = 0; i < areasMaximas.length; i++) {
+			for (var i:int = 0; i < nAreas; i++) {
+				var yMin:Number = funcoes[funcaoAtual](graph.pixel2x(pontoA.x - graph.x) + (i * largura));
+				var yMax:Number = funcoes[funcaoAtual](graph.pixel2x(pontoA.x - graph.x) + ((i + 1) * largura));
+				
+				if (yMin > yMax) {
+					var aux:Number = yMin;
+					yMin = yMax;
+					yMax = aux;
+				}
+				
+				somaTotalMaxima += largura * yMax;
+				somaTotalMinima += largura * yMin;
 			}
+			
+			somaMaximo.text = "" + somaTotalMaxima.toFixed(2).replace(".", ",");
 			somaMinimo.text = "" + somaTotalMinima.toFixed(2).replace(".", ",");
 			
 			
