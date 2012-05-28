@@ -39,7 +39,7 @@ package
 			
 			 tutor.adicionarBalao("Escolha a função que deve ser exibida.", new Point(540, 460), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
 			 tutor.adicionarBalao("Arraste os pontos a e b para alterar os limites de integração.", new Point(277, 380), CaixaTexto.BOTTOM, CaixaTexto.CENTER);
-			 tutor.adicionarBalao("Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.", new Point(320, 525), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
+			 tutor.adicionarBalao("Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.", new Point(317, 506), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
 			 tutor.adicionarBalao("Altere o número de elementos de área", new Point(475, 495), CaixaTexto.RIGHT, CaixaTexto.LAST);
 			 
 			 
