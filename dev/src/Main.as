@@ -25,7 +25,7 @@ package
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
-		private function createTutorial() {
+		private function createTutorial():void {
 			/**
 			 * Balão #1 (apontando para o menu de funções):
 				Escolha a função que deve ser exibida.
@@ -38,8 +38,9 @@ package
 			 */
 			
 			 tutor.adicionarBalao("Escolha a função que deve ser exibida.", new Point(540, 460), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
-			 tutor.adicionarBalao("Arraste os pontos A e B para alterar os limites de integração.", new Point(277, 380), CaixaTexto.BOTTOM, CaixaTexto.CENTER);
+			 tutor.adicionarBalao("Arraste os pontos a e b para alterar os limites de integração.", new Point(277, 380), CaixaTexto.BOTTOM, CaixaTexto.CENTER);
 			 tutor.adicionarBalao("Escolha o que você quer ver: a área, a aproximação por baixo (soma inferior) e/ou a soma superior.", new Point(320, 525), CaixaTexto.BOTTOM, CaixaTexto.RIGHT);
+			 tutor.adicionarBalao("Altere o número de elementos de área", new Point(475, 495), CaixaTexto.RIGHT, CaixaTexto.LAST);
 			 
 			 
 		}
@@ -55,8 +56,10 @@ package
 			botbar.x = 122;
 			ai.container.addChild(botbar);
 			ai.container.messageLabel.visible = false;
-			ai.container.setAboutScreen(new AboutScreen());						
+			ai.container.setAboutScreen(new AboutScreen());					
+			
 			ai.container.setInfoScreen(new InstScreen());
+			
 			
 			ai.container.optionButtons.y = 344;
 			ai.container.optionButtons.x -= 5;
@@ -64,6 +67,9 @@ package
 			//ai.container.optionButtons.y = ai.container.optionButtons.y - 140;
 			
 			loadLO();
+			ai.container.optionButtons.resetButton.enabled = false;
+			ai.container.optionButtons.resetButton.alpha = 0.6;
+			
 			tutor.iniciar(stage);
 		}
 
@@ -77,6 +83,7 @@ package
 		}
 		private function finishLoading(loadEvent:Event):void {
 			ai.container.addChild(loadEvent.currentTarget.content);
+			
 		}
 
 		private function errorHandler(e:Event):void 
@@ -88,7 +95,7 @@ package
 		
 		public function onResetClick() 
 		{
-			trace("reset");
+		//	loadLO();
 		}
 		
 		public function onScormFetch() 

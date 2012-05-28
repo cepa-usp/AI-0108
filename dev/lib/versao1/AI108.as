@@ -57,7 +57,7 @@
 		private var graphFunction:GraphFunction;
 		private var areasMaximas:Sprite;
 		private var areasMinimas:Sprite;
-		private var pontoA:MovieClip;
+		public var pontoA:MovieClip;
 		private var pontoB:MovieClip;
 		private var funcaoAtual:int;
 		private var pontoArraste:MovieClip;
@@ -137,6 +137,7 @@
 		private function showMouseCoords(e:TimerEvent):void 
 		{
 			if (stage.mouseY > graph.height) return;
+			if (stage.mouseX > graph.width) return;
 			Actuate.tween(mouseCoord, 1, { alpha:1 } );
 		}
 		
@@ -221,16 +222,16 @@
 			opcoes.dataProvider = new DataProvider(listaFuncoes);
 			
 			qtAreas = new ComboBox();
-			qtAreas.dataProvider = new DataProvider([3, 5, 10, 20, 50, 100, 200, 500, 1000]);
+			qtAreas.dataProvider = new DataProvider([3, 5, 10, 20, 50, 100, 150, 200, 500]);
 			
 			
 			addChild(opcoes);
 			addChild(qtAreas);
 			opcoes.addEventListener(Event.CHANGE, addFunction);
 			qtAreas.addEventListener(Event.CHANGE, onAreaChange);			
-			var linhaCheckboxesY:int = 500;
+			var linhaCheckboxesY:int = 486;
 			
-			showMaximo.x = 305;// 350;
+			showMaximo.x = 303;// 350;
 			showMaximo.width += 40;
 			showMaximo.y = linhaCheckboxesY;
 			
@@ -241,11 +242,11 @@
 			showMinimo.width += 40;
 			showMinimo.y = linhaCheckboxesY;
 			
-			somaMinimo.x = 30;
+			somaMinimo.x = 90;
 			somaMinimo.y = 452;
 			
 			
-			showTotal.x = 160;//200;
+			showTotal.x = 180;//200;
 			showTotal.y = linhaCheckboxesY;
 			
 			
@@ -253,8 +254,8 @@
 			somaTotal.y = showTotal.y;
 			somaTotal.visible = false;
 			
-			integral.x = 200;
-			integral.y = 465;
+			integral.x = 210;
+			integral.y = 458;
 			
 			opcoes.x = 470;
 			opcoes.y = 450;
@@ -352,8 +353,10 @@
 			}
 			
 			graph = new SimpleGraph(xMin, xMax, largura, yMin, yMax, altura);
+			
+			graph.setAxesNameFormat(graph.getLabelsFormat());
 			graph.setAxisName("AXIS_X", "x");
-			graph.setAxisName("AXIS_Y", "y");
+			graph.setAxisName("AXIS_Y", " y ");
 
 			//graph.setTicksDistance(SimpleGraph.AXIS_X, 1);
 			//graph.setSubticksDistance(SimpleGraph.AXIS_X, 1);
@@ -377,7 +380,7 @@
 			graphFunction = new GraphFunction(0, 20, function ():Number {return 0 } );
 			
 			graph.addFunction(graphFunction, style1);
-			
+			dx.visible = false;
 			dx.addEventListener(MouseEvent.MOUSE_OVER, onDxOver);
 			dx.addEventListener(MouseEvent.MOUSE_OUT, onDxOut);
 			//dx.txt.visible = false;
@@ -483,10 +486,10 @@
 				pontoB.addEventListener(MouseEvent.MOUSE_DOWN, initArrastePonto);
 			}
 			
-			pontoA.x = graph.x2pixel(pontosIniciais[funcaoAtual].x) + graph.x;
+			pontoA.x = graph.x2pixel(pontosIniciais[funcaoAtual].x) + graph.x -3;
 			pontoA.y = graph.y2pixel(0) + graph.y;
 			
-			pontoB.x = graph.x2pixel(pontosIniciais[funcaoAtual].y) + graph.x;
+			pontoB.x = graph.x2pixel(pontosIniciais[funcaoAtual].y) + graph.x -3;
 			pontoB.y = graph.y2pixel(0) + graph.y;
 			
 			dx.x = pontoA.x + (pontoB.x - pontoA.x) / 8;
