@@ -2,6 +2,7 @@ package
 {
 	import cepa.AI;
 	import cepa.AIObserver;
+	import cepa.ToolTip;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -69,6 +70,10 @@ package
 			loadLO();
 			ai.container.optionButtons.resetButton.enabled = false;
 			ai.container.optionButtons.resetButton.alpha = 0.6;
+			
+			new ToolTip(ai.container.optionButtons.orientacoesBtn, "Orientações");
+			new ToolTip(ai.container.optionButtons.tutorialBtn, "Tutorial");
+			new ToolTip(ai.container.optionButtons.creditos, "Créditos");
 			
 			tutor.iniciar(stage);
 		}

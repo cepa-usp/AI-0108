@@ -59,7 +59,6 @@ package cepa
 			_object = object;
 			_timeToShow = timeToShow;
 			_timeToHide = timeToHide;
-			
 			textField = new TextField();			
 			
 			draw();
@@ -153,7 +152,7 @@ package cepa
 		 */
 		private function show (e:MouseEvent) : void
 		{
-			stage.addChild(this);
+			_object.stage.addChild(this);
 			this.visible = true;
 			_visible = true;
 			moving(null);
