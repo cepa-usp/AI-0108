@@ -8,17 +8,19 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>true</value>
+      <value>false</value>
     </define>
     <define append="true">
       <name>CONFIG::release</name>
-      <value>false</value>
+      <value>true</value>
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
       <value>'31/5/2012'</value>
     </define>
-    <verbose-stacktraces>true</verbose-stacktraces>
+    <optimize>true</optimize>
+    <omit-trace-statements>true</omit-trace-statements>
+    <verbose-stacktraces>false</verbose-stacktraces>
     <source-path append="true">
       <path-element>C:\Documents and Settings\Arthur\Meus documentos\CEPA\GitHub\AI-0108\dev\src</path-element>
       <path-element>C:\Documents and Settings\Arthur\Meus documentos\CEPA\GitHub\AI-0108\dev\lib</path-element>
