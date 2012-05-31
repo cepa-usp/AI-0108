@@ -1,16 +1,16 @@
 package 
 {
-	import cepa.AI;
-	import cepa.AIObserver;
-	import cepa.ToolTip;
+	import cepa.ai.AI;
+	import cepa.ai.AIObserver;
+	import cepa.tooltip.ToolTip;
+	import cepa.tutorial.CaixaTexto;
+	import cepa.tutorial.Tutorial;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.geom.Point;
 	import flash.net.URLRequest;
-	import tutorial.CaixaTexto;
-	import tutorial.Tutorial;
 	
 	/**
 	 * ...
@@ -63,17 +63,18 @@ package
 			
 			
 			ai.container.optionButtons.y = 344;
-			ai.container.optionButtons.x -= 5;
+			ai.container.optionButtons.x += 7;
 			ai.container.optionButtons.y += 35;
 			//ai.container.optionButtons.y = ai.container.optionButtons.y - 140;
 			
 			loadLO();
-			ai.container.optionButtons.resetButton.enabled = false;
-			ai.container.optionButtons.resetButton.alpha = 0.6;
+			//ai.container.optionButtons.btReset.enabled = false;
+			ai.container.disableComponent(ai.container.optionButtons.btReset)
+			//ai.container.optionButtons.btReset.alpha = 0.6;
 			
-			new ToolTip(ai.container.optionButtons.orientacoesBtn, "Orientações");
-			new ToolTip(ai.container.optionButtons.tutorialBtn, "Tutorial");
-			new ToolTip(ai.container.optionButtons.creditos, "Créditos");
+			new ToolTip(ai.container.optionButtons.btOrientacoes, "Orientações");
+			new ToolTip(ai.container.optionButtons.btTutorial, "Tutorial");
+			new ToolTip(ai.container.optionButtons.btCreditos, "Créditos");
 			
 			tutor.iniciar(stage);
 		}
@@ -93,7 +94,7 @@ package
 
 		private function errorHandler(e:Event):void 
 		{
-			
+			//
 		}
 		
 		/* INTERFACE cepa.AIObserver */

@@ -15,7 +15,7 @@ function init () {
 	var flashvars = {};
 	flashvars.ai = "swf/AI-" + aiNumber + ".swf";
 	flashvars.width = "700";
-	flashvars.height = "600";
+	flashvars.height = "550";
 	
 	var params = {};
 	params.menu = "false";
@@ -25,7 +25,7 @@ function init () {
 	attributes.id = "ai";
 	attributes.align = "middle";
 
-	swfobject.embedSWF("swf/AI_Loader.swf", "ai-container", flashvars.width, flashvars.height, "10.0.0", "expressInstall.swf", flashvars, params, attributes);
+	swfobject.embedSWF("swf/AI-0108.swf", "ai-container", flashvars.width, flashvars.height, "10.0.0", "expressInstall.swf", flashvars, params, attributes);
 	
 }
 
