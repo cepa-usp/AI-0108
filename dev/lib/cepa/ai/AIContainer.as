@@ -72,8 +72,8 @@ package cepa.ai
 			aboutScreen = sprite;
 //			var bt:CloseButton = new CloseButton();
 			//aboutScreen.addChild(bt);
-			aboutScreen.x = 700 / 2;
-			aboutScreen.y = 688 / 2 + 88;
+			aboutScreen.x = stage.stageWidth / 2;
+			aboutScreen.y = stage.stageHeight / 2;
 			//bt.x = aboutScreen.width - 30;
 			//bt.y = 30;
 			aboutScreen.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void { closeScreen(aboutScreen) } );				
@@ -92,8 +92,8 @@ package cepa.ai
 			if(infoScreen!=null) layerUI.removeChild(infoScreen);
 			infoScreen = sprite;
 			var bt:CloseButton = new CloseButton();
-			infoScreen.x = 700 / 2;
-			infoScreen.y = 688 / 2 + 6;
+			infoScreen.x = stage.stageWidth / 2;
+			infoScreen.y = stage.stageHeight / 2;
 
 			bt.x = infoScreen.width - 30;
 			bt.y = 30;

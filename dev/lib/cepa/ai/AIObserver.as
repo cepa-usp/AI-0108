@@ -7,10 +7,10 @@ package cepa.ai
 	 */
 	public interface AIObserver 
 	{
-		function onResetClick();
-		function onScormFetch();
-		function onScormSave();
-		function onTutorialClick();
+		function onResetClick():void;
+		function onScormFetch():void;
+		function onScormSave():void;
+		function onTutorialClick():void;
 	}
 	
 }

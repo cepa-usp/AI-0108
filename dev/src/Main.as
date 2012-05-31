@@ -6,6 +6,7 @@ package
 	import cepa.tutorial.CaixaTexto;
 	import cepa.tutorial.Tutorial;
 	import flash.display.Loader;
+	import cepa.ai.AIContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -53,6 +54,7 @@ package
 			ai = new AI(this);
 			ai.addObserver(this);
 			var botbar:BottomBar = new BottomBar();
+			botbar.filters = [AIContainer.SHADOW_FILTER];
 			botbar.y = 451;
 			botbar.x = 122;
 			ai.container.addChild(botbar);
@@ -99,22 +101,22 @@ package
 		
 		/* INTERFACE cepa.AIObserver */
 		
-		public function onResetClick() 
+		public function onResetClick():void 
 		{
 		//	loadLO();
 		}
 		
-		public function onScormFetch() 
+		public function onScormFetch():void
 		{
 			trace("scorm fetch");
 		}
 		
-		public function onScormSave() 
+		public function onScormSave():void
 		{
 			trace("scorm save");
 		}
 		
-		public function onTutorialClick() 
+		public function onTutorialClick():void
 		{
 			tutor.iniciar(stage);
 		}
